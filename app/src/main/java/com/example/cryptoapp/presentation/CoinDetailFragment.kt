@@ -1,16 +1,11 @@
 package com.example.cryptoapp.presentation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.cryptoapp.R
-import com.example.cryptoapp.databinding.ActivityCoinDetailBinding
 import com.example.cryptoapp.databinding.FragmentCoinDetailBinding
 import com.squareup.picasso.Picasso
 
@@ -26,7 +21,7 @@ class CoinDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCoinDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,6 +46,11 @@ class CoinDetailFragment : Fragment() {
 
     private fun getSymbol(): String{
         return requireArguments().getString(EXTRA_FROM_SYMBOL, EMPTY_SYMBOL)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
