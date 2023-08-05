@@ -1,5 +1,6 @@
 package com.example.cryptoapp.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,15 @@ class CoinDetailFragment : Fragment() {
     private var _binding: FragmentCoinDetailBinding? = null
     private val binding: FragmentCoinDetailBinding
         get() = _binding ?: throw RuntimeException("FragmentCoinDetailBinding is null")
+
+    private val component by lazy{
+        (requireActivity().application as CoinApp).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
