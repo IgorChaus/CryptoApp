@@ -29,7 +29,6 @@ class CoinDetailFragment : Fragment() {
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
-
     }
 
     override fun onCreateView(
