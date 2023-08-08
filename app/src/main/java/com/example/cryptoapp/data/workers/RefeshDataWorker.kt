@@ -2,21 +2,20 @@ package com.example.cryptoapp.data.workers
 
 import android.content.Context
 import androidx.work.*
-import com.example.cryptoapp.data.database.AppDatabase
+import com.example.cryptoapp.data.database.CoinInfoDao
 import com.example.cryptoapp.data.mapper.CoinMapper
-import com.example.cryptoapp.data.network.ApiFactory
+import com.example.cryptoapp.data.network.ApiService
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
 class RefeshDataWorker(
     context: Context,
-    workerParameters: WorkerParameters
+    workerParameters: WorkerParameters,
+    private val coinInfoDao: CoinInfoDao,
+    private val apiService: ApiService,
+    private val mapper: CoinMapper
 ): CoroutineWorker(context, workerParameters) {
 
-    private val coinInfoDao = AppDatabase.getInstance(context).coinPriceInfoDao()
-
-    private val apiService = ApiFactory.apiService
-
-    private val mapper = CoinMapper()
 
     override suspend fun doWork(): Result {
         while(true) {
@@ -31,6 +30,26 @@ class RefeshDataWorker(
             }
             delay(10000)
         }
+    }
+
+    class Factory @Inject constructor(
+        private val coinInfoDao: CoinInfoDao,
+        private val apiService: ApiService,
+        private val mapper: CoinMapper
+    ): ChildWorkerFactory{
+        override fun create(
+            context: Context,
+            workerParameters: WorkerParameters
+        ): ListenableWorker {
+            return RefeshDataWorker(
+                context,
+                workerParameters,
+                coinInfoDao,
+                apiService,
+                mapper
+            )
+        }
+
     }
 
     companion object{
